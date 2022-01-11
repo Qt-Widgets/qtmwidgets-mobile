@@ -1,3 +1,5 @@
+![build](https://github.com/igormironchik/qtmwidgets/workflows/build/badge.svg)[![codecov](https://codecov.io/gh/igormironchik/qtmwidgets/branch/master/graph/badge.svg?token=X8R9B3WEIY)](https://codecov.io/gh/igormironchik/qtmwidgets)[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
 Library with a set of widgets for mobile development.
 
 # Compilling
@@ -15,7 +17,7 @@ and enjoy it.
 Picker is the list of selectable strings on the cylinder. It looks like iOS Picker but with API like
 QComboBox.
 
-![Picker]( https://image.ibb.co/hqOiak/picker_v2.png )
+![Picker]( doc/img/picker_v2.png )
 
 ```cpp
 QtMWidgets::Picker * picker =
@@ -42,7 +44,7 @@ picker->setFont( font );
 DateTimePicker, DatePicker and TimePicker are widgets for selecting date &amp; time, date, time. They
 are look similar as correspondence widgets from iOS but have interface as QDateTimeEdit.
 
-![DateTimePicker]( https://image.ibb.co/nxUd85/datetimepicker_v2.png )
+![DateTimePicker]( doc/img/datetimepicker_v2.png )
 
 ```cpp
 QtMWidgets::DateTimePicker * picker =
@@ -53,7 +55,7 @@ font.setPointSize( 13 );
 
 picker->setFont( font );
 ```
-![DatePicker]( https://image.ibb.co/c47n1Q/datepicker_v2.png )
+![DatePicker]( doc/img/datepicker_v2.png )
 
 ```cpp
 QtMWidgets::DatePicker * picker =
@@ -65,7 +67,7 @@ font.setPointSize( 13 );
 picker->setFont( font );
 ```
 
-![TimePicker]( https://image.ibb.co/kiJiak/timepicker_v2.png )
+![TimePicker]( doc/img/timepicker_v2.png )
 
 ```cpp
 QtMWidgets::TimePicker * picker =
@@ -83,7 +85,7 @@ picker->setFormat( QLatin1String( "hh mm a" ) );
 
 Switch is On/Off button used, for example, in Setting app for options that can be switched.
 
-![Switch]( https://image.ibb.co/n1L71Q/switch_v2.png )
+![Switch]( doc/img/switch_v2.png )
 
 ```cpp
 QtMWidgets::Switch * s =
@@ -102,7 +104,7 @@ s->setOffText( QLatin1String( "OFF" ) );
 AbstractScrollArea and ScrollArea provides possibility of scrolling large widgets that
 doesn't fit the screen area.
 
-![ScrollArea]( https://image.ibb.co/bTrrT5/scrollarea.png )
+![ScrollArea]( doc/img/scrollarea.png )
 
 ```cpp
 QtMWidgets::ScrollArea * scrollArea =
@@ -123,47 +125,7 @@ from iOS. TableView is widget based view that allows to display sections with ro
 (cells). Cell can have accessory widget, for example, Switch. This class is very usefull
 for settings of the application.
 
-![TableView]( https://image.ibb.co/g7A71Q/tableview_v2.png )
-
-```cpp
-QtMWidgets::TableView * view =
-    new QtMWidgets::TableView( this );
-
-QtMWidgets::TableViewSection * ringerAndAlerts =
-    new QtMWidgets::TableViewSection( view );
-ringerAndAlerts->header()->setText(
-    QLatin1String( "RINGER AND ALERTS" ) );
-ringerAndAlerts->footer()->setText(
-    QLatin1String( "The volume of the ringer and alerts "
-        "can be adjusted using the volume buttons." ) );
-
-QtMWidgets::TableViewCell * volume =
-    new QtMWidgets::TableViewCell( ringerAndAlerts );
-volume->textLabel()->setSizePolicy( QSizePolicy::Fixed,
-    QSizePolicy::Fixed );
-volume->layout()->setSpacing( 0 );
-QSlider * volumeSlider = new QSlider( Qt::Horizontal,
-    volume );
-volumeSlider->setSizePolicy( QSizePolicy::Expanding,
-    QSizePolicy::Fixed );
-volume->setAccessoryWidget( volumeSlider );
-ringerAndAlerts->addCell( volume );
-
-QtMWidgets::TableViewCell * changeWithButtons =
-    new QtMWidgets::TableViewCell( ringerAndAlerts );
-changeWithButtons->textLabel()->setText(
-    QLatin1String( "Change with Buttons" ) );
-
-QtMWidgets::Switch * changeWithButtonsSwitch =
-    new QtMWidgets::Switch( changeWithButtons );
-changeWithButtonsSwitch->setState(
-    QtMWidgets::Switch::AcceptedCheck );
-
-changeWithButtons->setAccessoryWidget( changeWithButtonsSwitch );
-ringerAndAlerts->addCell( changeWithButtons );
-
-view->addSection( ringerAndAlerts );
-```
+![TableView]( doc/img/tableview-v3.png )
 
 ## Slider
 
@@ -172,7 +134,7 @@ But it doesn't support styles, but it acceptable to use
 on mobile platforms. It has big slider's handle and highlights
 position of the handle in the groove.
 
-![Slider]( https://image.ibb.co/dF63ak/slider_v2.png )
+![Slider]( doc/img/slider_v2.png )
 
 ```cpp
 QtMWidgets::Slider * volumeSlider =

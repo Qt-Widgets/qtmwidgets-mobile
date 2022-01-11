@@ -98,7 +98,7 @@ public:
 	}
 
 protected:
-	virtual void paintEvent( QPaintEvent * )
+	void paintEvent( QPaintEvent * ) override
 	{
 		QPainter p( this );
 
@@ -109,7 +109,7 @@ protected:
 			d->preparedTitle, QTextOption( Qt::AlignLeft | Qt::AlignVCenter ) );
 	}
 
-	virtual void resizeEvent( QResizeEvent * )
+	void resizeEvent( QResizeEvent * ) override
 	{
 		d->prepareTitle();
 	}
@@ -435,6 +435,8 @@ MessageBox::removeButton( QAbstractButton * button )
 			d->buttonSeparators.removeAt( index - 1 );
 
 			disconnect( button, 0, this, 0 );
+
+			button->deleteLater();
 
 			resize( d->vbox->sizeHint() );
 

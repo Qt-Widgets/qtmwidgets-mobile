@@ -42,6 +42,7 @@
 #include <QMouseEvent>
 #include <QTimer>
 #include <QElapsedTimer>
+#include <QPainter>
 
 
 namespace QtMWidgets {
@@ -136,7 +137,7 @@ public:
 	}
 
 protected:
-	void paintEvent( QPaintEvent * )
+	void paintEvent( QPaintEvent * ) override
 	{
 		QPainter p( this );
 
@@ -183,7 +184,7 @@ class AbstractListViewBase
 	:	public AbstractScrollArea
 {
 	Q_OBJECT
-	Q_ENUMS( ScrollHint )
+
 	/*!
 		\property spacing
 
@@ -219,6 +220,8 @@ public:
 		//! Scroll to position the item at the center of the viewport.
 		PositionAtCenter = 3
 	}; // enum ScrollHint
+
+	Q_ENUM( ScrollHint )
 
 public:
 	virtual ~AbstractListViewBase();
@@ -514,7 +517,7 @@ protected:
 		return FingerGeometry::height();
 	}
 
-	virtual void scrollContentsBy( int dx, int dy )
+	void scrollContentsBy( int dx, int dy ) override
 	{
 		Q_UNUSED( dx )
 
@@ -525,7 +528,7 @@ protected:
 		d->normalizeOffset( d->firstVisibleRow, d->offset );
 	}
 
-	virtual void dataChanged( int first, int last )
+	void dataChanged( int first, int last ) override
 	{
 		AbstractListViewPrivate< T > * d = d_func();
 
@@ -534,7 +537,7 @@ protected:
 		d->updateIfNeeded( first, last );
 	}
 
-	virtual void modelReset()
+	void modelReset() override
 	{
 		AbstractListViewPrivate< T > * d = d_func();
 
@@ -546,7 +549,7 @@ protected:
 		d->viewport->update();
 	}
 
-	virtual void rowsInserted( int first, int last )
+	void rowsInserted( int first, int last ) override
 	{
 		AbstractListViewPrivate< T > * d = d_func();
 
@@ -558,7 +561,7 @@ protected:
 		d->updateIfNeeded( first, last );
 	}
 
-	virtual void rowsRemoved( int first, int last )
+	void rowsRemoved( int first, int last ) override
 	{
 		AbstractListViewPrivate< T > * d = d_func();
 
@@ -585,8 +588,8 @@ protected:
 		d->updateIfNeeded( first, last )	;
 	}
 
-	virtual void rowsMoved( int sourceStart,
-		int sourceEnd, int destinationRow )
+	void rowsMoved( int sourceStart,
+		int sourceEnd, int destinationRow ) override
 	{
 		AbstractListViewPrivate< T > * d = d_func();
 
@@ -602,7 +605,7 @@ protected:
 				destinationRow + sourceEnd - sourceStart );
 	}
 
-	virtual void timerElapsed()
+	void timerElapsed() override
 	{
 		AbstractListViewPrivate< T > * d = d_func();
 
@@ -614,7 +617,7 @@ protected:
 			emit rowLongTouched( row );
 	}
 
-	virtual void recalculateSize()
+	void recalculateSize() override
 	{
 		AbstractListViewPrivate< T > * d = d_func();
 
@@ -622,7 +625,7 @@ protected:
 	}
 
 protected:
-	virtual void mousePressEvent( QMouseEvent * e )
+	void mousePressEvent( QMouseEvent * e ) override
 	{
 		AbstractListViewBase::mousePressEvent( e );
 
@@ -639,7 +642,7 @@ protected:
 		}
 	}
 
-	virtual void mouseMoveEvent( QMouseEvent * e )
+	void mouseMoveEvent( QMouseEvent * e ) override
 	{
 		AbstractListViewPrivate< T > * d = d_func();
 
@@ -651,7 +654,7 @@ protected:
 		AbstractListViewBase::mouseMoveEvent( e );
 	}
 
-	virtual void mouseReleaseEvent( QMouseEvent * e )
+	void mouseReleaseEvent( QMouseEvent * e ) override
 	{
 		AbstractListViewBase::mouseReleaseEvent( e );
 
@@ -674,12 +677,12 @@ protected:
 
 			d->elapsedTimer.start();
 
-			if( d->clickCount == 2 && row >= 0 && row < d->model->rowCount())
+			if( d->clickCount == 2 && row >= 0 && row < d->model->rowCount() )
 				emit rowDoubleTouched( row );
 		}
 	}
 
-	virtual void resizeEvent( QResizeEvent * e )
+	void resizeEvent( QResizeEvent * e ) override
 	{
 		AbstractListViewBase::resizeEvent( e );
 
@@ -792,7 +795,7 @@ AbstractListViewPrivate< T >::calculateScroll( int row,
 		}
 	}
 
-	return delta;
+	return -delta;
 }
 
 template< typename T >

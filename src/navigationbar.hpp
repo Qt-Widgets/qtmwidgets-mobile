@@ -79,7 +79,7 @@ public:
 
 		\return Index of the screen.
 	*/
-	int addWidget( int parentIndex, const QString & title,
+	int addWidget( QWidget * parent, const QString & title,
 		QWidget * widget );
 
 	//! Remove widget from the hierarchy.
@@ -97,20 +97,20 @@ public:
 	//! \return Widget with the given \a index index.
 	QWidget * widget( int index ) const;
 
-	virtual QSize minimumSizeHint() const;
-	virtual QSize sizeHint() const;
+	QSize minimumSizeHint() const override;
+	QSize sizeHint() const override;
 
 public slots:
 	//!	Show screen with the given \a index index.
-	void showScreen( int index );
+	void showScreen( QWidget * s );
 	//! Show previous screen.
 	void showPreviousScreen();
 	//! Show next screen.
 	void showNextScreen();
 
 protected:
-	virtual void resizeEvent( QResizeEvent * e );
-	virtual void hideEvent( QHideEvent * e );
+	void resizeEvent( QResizeEvent * e ) override;
+	void hideEvent( QHideEvent * e ) override;
 
 private:
 	Q_DISABLE_COPY( NavigationBar )

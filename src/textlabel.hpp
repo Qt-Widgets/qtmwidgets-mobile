@@ -116,7 +116,7 @@ public:
 		The \a parent and widget flag \a f, arguments are passed
 		to the QFrame constructor.
 	*/
-	TextLabel( QWidget * parent = 0, Qt::WindowFlags f = 0 );
+	TextLabel( QWidget * parent = 0, Qt::WindowFlags f = Qt::WindowFlags() );
 	/*!
 		Constructs a label that displays the text \a text.
 
@@ -124,7 +124,7 @@ public:
 		to the QFrame constructor.
 	*/
 	explicit TextLabel( const QString & text,
-		QWidget * parent = 0, Qt::WindowFlags f = 0 );
+		QWidget * parent = 0, Qt::WindowFlags f = Qt::WindowFlags() );
 
 	virtual ~TextLabel();
 
@@ -156,14 +156,14 @@ public:
 	//! Set color.
 	void setColor( const QColor & c );
 
-	virtual bool hasHeightForWidth() const;
-	virtual int	heightForWidth( int w ) const;
-	virtual QSize minimumSizeHint() const;
-	virtual QSize sizeHint() const;
+	bool hasHeightForWidth() const override;
+	int heightForWidth( int w ) const override;
+	QSize minimumSizeHint() const override;
+	QSize sizeHint() const override;
 
 protected:
-	virtual void paintEvent( QPaintEvent * e );
-	virtual void resizeEvent( QResizeEvent * e );
+	void paintEvent( QPaintEvent * e ) override;
+	void resizeEvent( QResizeEvent * e ) override;
 
 private:
 	Q_DISABLE_COPY( TextLabel )

@@ -1,11 +1,18 @@
 
 project( QtMWidgets )
 
+if( ENABLE_COVERAGE )
+	set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -fprofile-arcs -ftest-coverage" )
+	set( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --coverage" )
+endif( ENABLE_COVERAGE )
+
+find_package( Qt6Core REQUIRED )
+find_package( Qt6Gui REQUIRED )
+find_package( Qt6Widgets REQUIRED )
 
 set( SRC picker.hpp
 	pageview.hpp
 	progressbar.cpp
-	lineedit.hpp
 	stepper.cpp
 	abstractlistmodel.hpp
 	abstractscrollarea.cpp
@@ -14,7 +21,6 @@ set( SRC picker.hpp
 	busyindicator.hpp
 	fingergeometry.hpp
 	datetimepicker.cpp
-	lineedit.cpp
 	abstractlistview.cpp
 	abstractscrollarea.hpp
 	scroller.cpp
@@ -29,14 +35,12 @@ set( SRC picker.hpp
 	tableview.cpp
 	slider.hpp
 	messagebox.cpp
-	textedit.cpp
 	color.cpp
 	datetimepicker.hpp
 	stepper.hpp
 	datepicker.hpp
 	scroller.hpp
 	pagecontrol.cpp
-	textedit.hpp
 	timepicker.cpp
 	scrollarea.hpp
 	navigationbar.cpp
@@ -50,7 +54,6 @@ set( SRC picker.hpp
 	scrollarea.cpp
 	switch.hpp
 	navigationbutton.hpp
-	private/cursorshifter.hpp
 	private/layoutengine.cpp
 	private/datetimeparser.hpp
 	private/datetimeparser.cpp
@@ -63,22 +66,21 @@ set( SRC picker.hpp
 	private/scrollarea_p.hpp
 	private/listmodel_p.hpp
 	private/layoutengine.hpp
-	private/cursorshifter.cpp
 	slider.cpp
 	busyindicator.cpp
 	tableview.hpp
 	textlabel.hpp
 	navigationarrow.hpp
-	listmodel.hpp )
-    
+	listmodel.hpp
+	private/utils.hpp
+	private/utils.cpp )
+
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/../include
 	${CMAKE_CURRENT_SOURCE_DIR} )
 
-include_directories( ${Qt5Core_INCLUDE_DIRS}
-	${Qt5Gui_INCLUDE_DIRS}
-	${Qt5Widgets_INCLUDE_DIRS} )
-
 add_library( QtMWidgets STATIC ${SRC} )
+
+target_link_libraries( QtMWidgets Qt6::Widgets Qt6::Gui Qt6::Core )
 
 set_property( TARGET QtMWidgets PROPERTY CXX_STANDARD 14 )
 

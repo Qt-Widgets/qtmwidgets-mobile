@@ -40,8 +40,7 @@
 #include <QSpacerItem>
 #include <QMouseEvent>
 #include <QPainter>
-
-#include <QDebug>
+#include <QPicture>
 
 
 namespace QtMWidgets {
@@ -61,10 +60,11 @@ public:
 		setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
 	}
 
-	QSize minimumSizeHint() const
+	QSize minimumSizeHint() const override
 	{
-		if( text().isEmpty() && !pixmap() && !movie() && !picture() )
-			return QSize( 0, 0 );
+		if( text().isEmpty() && pixmap( Qt::ReturnByValue ).isNull() && !movie() &&
+			picture( Qt::ReturnByValue ).isNull() )
+				return QSize( 0, 0 );
 		else
 		{
 			const QSize labelSizeHint = QLabel::sizeHint();
@@ -74,7 +74,7 @@ public:
 		}
 	}
 
-	QSize sizeHint() const
+	QSize sizeHint() const override
 	{
 		return minimumSizeHint();
 	}
@@ -97,16 +97,16 @@ public:
 	void setDetailedTextLabel( TextLabel * label );
 	void setAccessoryWidget( QWidget * w );
 
-	virtual void addItem( QLayoutItem * item );
-	virtual int count() const;
-	virtual QLayoutItem * itemAt( int index ) const;
-	virtual void setGeometry( const QRect & rect );
-	virtual QLayoutItem * takeAt( int index );
-	virtual bool hasHeightForWidth() const;
-	virtual int heightForWidth( int w ) const;
+	void addItem( QLayoutItem * item ) override;
+	int count() const override;
+	QLayoutItem * itemAt( int index ) const override;
+	void setGeometry( const QRect & rect ) override;
+	QLayoutItem * takeAt( int index ) override;
+	bool hasHeightForWidth() const override;
+	int heightForWidth( int w ) const override;
 
-	virtual QSize minimumSizeHint() const;
-	virtual QSize sizeHint() const;
+	QSize minimumSize() const override;
+	QSize sizeHint() const override;
 
 private:
 	void setTextGeometry( const QRect & r, int imageOffset,
@@ -231,7 +231,7 @@ TableViewCellLayout::setGeometry( const QRect & rect )
 
 	const QSize accessorySizeHint = accessoryWidget->sizeHint();
 
-	if( !imageLabel->pixmap() || !imageLabel->text().isEmpty() )
+	if( imageLabel->pixmap( Qt::ReturnByValue ).isNull() || !imageLabel->text().isEmpty() )
 	{
 		if( accessorySizeHint.isEmpty() && textLabel->text().isEmpty() &&
 			detailedTextLabel->text().isEmpty() )
@@ -326,7 +326,7 @@ TableViewCellLayout::heightForWidth( int w ) const
 }
 
 QSize
-TableViewCellLayout::minimumSizeHint() const
+TableViewCellLayout::minimumSize() const
 {
 	const QSize imageSize = imageLabel->minimumSizeHint();
 
@@ -583,7 +583,7 @@ TableViewCell::mouseReleaseEvent( QMouseEvent * e )
 
 void
 TableViewSectionPrivate::init()
-{	
+{
 	q->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed );
 	q->setBackgroundRole( QPalette::Base );
 	q->setAutoFillBackground( true );
@@ -628,13 +628,13 @@ public:
 		setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
 	}
 
-	QSize sizeHint() const
+	QSize sizeHint() const override
 	{
 		return QSize( 1, 1 );
 	}
 
 protected:
-	void paintEvent( QPaintEvent * )
+	void paintEvent( QPaintEvent * ) override
 	{
 		QPainter p( this );
 
@@ -732,6 +732,10 @@ TableViewSection::removeCell( int index )
 		d->layout->removeWidget( cell );
 		cell->setParent( 0 );
 		cell->hide();
+
+		d->cells.removeAt( index );
+
+		adjustSize();
 
 		return cell;
 	}
@@ -867,6 +871,10 @@ TableView::removeSection( int index )
 		d->layout->removeWidget( s );
 		s->setParent( 0 );
 		s->hide();
+
+		d->sections.removeAt( index );
+
+		d->widget->adjustSize();
 
 		return s;
 	}

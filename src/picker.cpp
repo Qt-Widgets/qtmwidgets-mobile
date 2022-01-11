@@ -34,6 +34,7 @@
 #include "color.hpp"
 #include "scroller.hpp"
 #include "fingergeometry.hpp"
+#include "private/utils.hpp"
 
 // Qt include.
 #include <QStandardItemModel>
@@ -268,20 +269,7 @@ QString
 PickerPrivate::makeString( const QString & text, const QRect & r,
 	int flags, const QStyleOption & opt )
 {
-	const QRect & b = opt.fontMetrics.boundingRect( r, flags, text );
-
-	QString res = text;
-
-	if( b.width() > r.width() )
-	{
-		const int averageCount = r.width() / opt.fontMetrics.averageCharWidth();
-
-		res = text.left( averageCount - 6 );
-		res.append( QLatin1String( "..." ) );
-		res.append( text.right( averageCount - res.length() ) );
-	}
-
-	return res;
+	return accomodateString( text, r, flags, opt );
 }
 
 void
@@ -368,7 +356,7 @@ PickerPrivate::setCurrentIndex( const QPoint & pos )
 {
 	const QModelIndex index = indexForPos( pos );
 
-	if( index.isValid() )
+	if( index.isValid() && ( index.flags() & Qt::ItemIsEnabled ) )
 	{
 		setCurrentIndex( index );
 		emit q->activated( itemText( index ) );
@@ -851,6 +839,7 @@ Picker::setCurrentIndex( int index )
 {
 	QModelIndex mi = d->model->index( index, d->modelColumn, d->root );
 	d->setCurrentIndex( mi );
+	scrollTo( index );
 }
 
 void
@@ -860,6 +849,24 @@ Picker::setCurrentText( const QString & text )
 
 	if( i > -1 )
 		setCurrentIndex( i );
+}
+
+void
+Picker::scrollTo( int index )
+{
+	if( count() > d->itemsCount )
+	{
+		QModelIndex mi = d->model->index( index, d->modelColumn, d->root );
+		QPersistentModelIndex top = mi;
+
+		for( int i = 0; i < d->itemsCount / 2; ++i )
+			d->makePrevIndex( top );
+
+		d->topItemIndex = top;
+		d->drawItemOffset = 0;
+
+		update();
+	}
 }
 
 void

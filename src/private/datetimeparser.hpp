@@ -42,8 +42,6 @@ class QStyleOption;
 QT_END_NAMESPACE
 
 
-namespace QtMWidgets {
-
 #define DATETIMEPICKER_TIME_MIN QTime( 0, 0, 0, 0 )
 #define DATETIMEPICKER_TIME_MAX QTime( 23, 59, 59, 999 )
 #define DATETIMEPICKER_DATE_MIN QDate( 100, 1, 1 )
@@ -54,6 +52,8 @@ namespace QtMWidgets {
 #define DATETIMEPICKER_DATETIME_MAX QDateTime( DATETIMEPICKER_DATE_MAX, DATETIMEPICKER_TIME_MAX )
 #define DATETIMEPICKER_DATE_INITIAL QDate( 2000, 1, 1 )
 
+
+namespace QtMWidgets {
 
 //
 // Section
@@ -125,7 +125,7 @@ public:
 */
 class DateTimeParser {
 public:
-	explicit DateTimeParser( QVariant::Type t );
+	explicit DateTimeParser( QMetaType::Type t );
 
 	virtual ~DateTimeParser();
 
@@ -142,7 +142,7 @@ public:
 	//! Defined sections in format.
 	QVector< Section > sections;
 	//! Type of the parser.
-	QVariant::Type type;
+	QMetaType::Type type;
 	//! Format string.
 	QString format;
 }; // class DateTimeParser
